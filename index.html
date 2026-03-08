@@ -1,46 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
-<title>Type Chinese</title>
+
+<title>HanType</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 body{
-font-family:Arial;
+font-family:'Poppins',sans-serif;
 text-align:center;
-background:#f5f5f5;
-padding-top:120px;
+background:#f6f7fb;
+padding-top:100px;
 }
 
 .card{
 background:white;
-padding:40px;
-width:380px;
+padding:50px;
+width:420px;
 margin:auto;
-border-radius:14px;
-box-shadow:0 4px 10px rgba(0,0,0,0.08);
+border-radius:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.english{
+font-size:32px;
+font-weight:600;
+color:#333;
 }
 
 .hanzi{
-font-size:46px;
+font-size:60px;
 font-weight:700;
-transition:0.3s;
-position:relative;
-}
-
-.hanzi.big{
-font-size:72px;
+margin-top:6px;
 }
 
 .pinyin{
+font-size:24px;
 color:#bbb;
-font-size:28px;
-margin-top:10px;
+margin-top:6px;
 }
 
 .preview{
-font-size:30px;
+font-size:32px;
 margin-top:20px;
 letter-spacing:6px;
 font-weight:700;
@@ -49,65 +55,23 @@ font-weight:700;
 input{
 font-size:22px;
 padding:12px;
-width:240px;
+width:260px;
 margin-top:20px;
-border-radius:6px;
-border:1px solid #ccc;
+border-radius:10px;
+border:2px solid #e5e7eb;
 }
 
-.result{
-margin-top:20px;
-font-size:22px;
+input:focus{
+border-color:#3b82f6;
+outline:none;
 }
 
-.structure{
-margin-top:12px;
-color:#666;
+.topbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:15px;
 font-size:18px;
-}
-
-.parts{
-margin-top:10px;
-font-size:28px;
-}
-
-/* 柔和彩虹扫过 */
-
-.rainbowFlash{
-position:absolute;
-top:0;
-left:-100%;
-width:200%;
-height:100%;
-
-background:linear-gradient(
-120deg,
-rgba(255,0,0,0.25),
-rgba(255,127,0,0.25),
-rgba(255,215,0,0.25),
-rgba(0,170,0,0.25),
-rgba(0,206,209,0.25),
-rgba(0,102,255,0.25),
-rgba(139,0,255,0.25)
-);
-
-filter:blur(8px);
-
-animation:rainbowMove 1s ease;
-}
-
-@keyframes rainbowMove{
-0%{
-transform:translateX(-100%);
-opacity:0;
-}
-50%{
-opacity:1;
-}
-100%{
-transform:translateX(100%);
-opacity:0;
-}
+color:#555;
 }
 
 </style>
@@ -118,31 +82,31 @@ opacity:0;
 
 <div class="card">
 
-<div id="hanzi" class="hanzi">你好</div>
+<div class="topbar">
 
-<div class="pinyin">nǐ hǎo</div>
+<div id="progress"></div>
+
+<div id="score"></div>
+
+<div id="streak"></div>
+
+</div>
+
+<div id="english" class="english"></div>
+
+<div id="hanzi" class="hanzi"></div>
+
+<div id="pinyin" class="pinyin"></div>
 
 <input id="input" placeholder="type pinyin then press Enter">
 
 <div id="preview" class="preview"></div>
 
-<div class="result" id="result"></div>
-
-<div class="structure" id="structure"></div>
-
-<div class="parts" id="parts"></div>
-
 </div>
 
 <script>
 
-let input=document.getElementById("input");
-let preview=document.getElementById("preview");
-let hanzi=document.getElementById("hanzi");
-
-let answer="nihao";
-
-/* 彩虹标准色 */
+/* 彩虹颜色 */
 
 let colors=[
 "#FF0000",
@@ -154,17 +118,88 @@ let colors=[
 "#8B00FF"
 ];
 
-/* 键盘声音 */
+/* 100词库 */
 
-let keySound=new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
+let words=[
 
-input.addEventListener("keydown",function(){
+{hanzi:"你好",pinyin:"nǐ hǎo",type:"nihao",english:"Hello"},
+{hanzi:"谢谢",pinyin:"xiè xie",type:"xiexie",english:"Thank you"},
+{hanzi:"再见",pinyin:"zài jiàn",type:"zaijian",english:"Goodbye"},
+{hanzi:"中国",pinyin:"zhōng guó",type:"zhongguo",english:"China"},
+{hanzi:"美国",pinyin:"měi guó",type:"meiguo",english:"USA"},
+{hanzi:"英国",pinyin:"yīng guó",type:"yingguo",english:"UK"},
+{hanzi:"日本",pinyin:"rì běn",type:"riben",english:"Japan"},
+{hanzi:"韩国",pinyin:"hán guó",type:"hanguo",english:"Korea"},
+{hanzi:"北京",pinyin:"běi jīng",type:"beijing",english:"Beijing"},
+{hanzi:"上海",pinyin:"shàng hǎi",type:"shanghai",english:"Shanghai"},
 
-keySound.currentTime=0;
-keySound.play().catch(()=>{});
+{hanzi:"朋友",pinyin:"péng you",type:"pengyou",english:"Friend"},
+{hanzi:"学生",pinyin:"xué shēng",type:"xuesheng",english:"Student"},
+{hanzi:"老师",pinyin:"lǎo shī",type:"laoshi",english:"Teacher"},
+{hanzi:"医生",pinyin:"yī shēng",type:"yisheng",english:"Doctor"},
+{hanzi:"男人",pinyin:"nán rén",type:"nanren",english:"Man"},
+{hanzi:"女人",pinyin:"nǚ rén",type:"nvren",english:"Woman"},
+{hanzi:"孩子",pinyin:"hái zi",type:"haizi",english:"Child"},
+{hanzi:"爸爸",pinyin:"bà ba",type:"baba",english:"Father"},
+{hanzi:"妈妈",pinyin:"mā ma",type:"mama",english:"Mother"},
+{hanzi:"家人",pinyin:"jiā rén",type:"jiaren",english:"Family"},
 
-});
+{hanzi:"学习",pinyin:"xué xí",type:"xuexi",english:"Study"},
+{hanzi:"工作",pinyin:"gōng zuò",type:"gongzuo",english:"Work"},
+{hanzi:"吃饭",pinyin:"chī fàn",type:"chifan",english:"Eat"},
+{hanzi:"喝水",pinyin:"hē shuǐ",type:"heshui",english:"Drink"},
+{hanzi:"睡觉",pinyin:"shuì jiào",type:"shuijiao",english:"Sleep"},
+{hanzi:"走路",pinyin:"zǒu lù",type:"zoulu",english:"Walk"},
+{hanzi:"开车",pinyin:"kāi chē",type:"kaiche",english:"Drive"},
+{hanzi:"买",pinyin:"mǎi",type:"mai",english:"Buy"},
+{hanzi:"卖",pinyin:"mài",type:"mai",english:"Sell"},
+{hanzi:"看",pinyin:"kàn",type:"kan",english:"Look"},
 
+{hanzi:"今天",pinyin:"jīn tiān",type:"jintian",english:"Today"},
+{hanzi:"明天",pinyin:"míng tiān",type:"mingtian",english:"Tomorrow"},
+{hanzi:"昨天",pinyin:"zuó tiān",type:"zuotian",english:"Yesterday"},
+{hanzi:"现在",pinyin:"xiàn zài",type:"xianzai",english:"Now"},
+{hanzi:"以前",pinyin:"yǐ qián",type:"yiqian",english:"Before"},
+{hanzi:"以后",pinyin:"yǐ hòu",type:"yihou",english:"After"},
+{hanzi:"早上",pinyin:"zǎo shang",type:"zaoshang",english:"Morning"},
+{hanzi:"晚上",pinyin:"wǎn shang",type:"wanshang",english:"Evening"},
+{hanzi:"时间",pinyin:"shí jiān",type:"shijian",english:"Time"},
+{hanzi:"小时",pinyin:"xiǎo shí",type:"xiaoshi",english:"Hour"}
+
+];
+
+/* 游戏变量 */
+
+let current;
+let score=0;
+let streak=0;
+let index=0;
+
+let input=document.getElementById("input");
+let preview=document.getElementById("preview");
+
+/* 新词 */
+
+function nextWord(){
+
+current=words[Math.floor(Math.random()*words.length)];
+
+document.getElementById("hanzi").innerHTML=current.hanzi;
+document.getElementById("pinyin").innerHTML=current.pinyin;
+document.getElementById("english").innerHTML=current.english;
+
+input.value="";
+preview.innerHTML="";
+
+index++;
+
+document.getElementById("progress").innerHTML="Word "+index;
+document.getElementById("score").innerHTML="Score "+score;
+document.getElementById("streak").innerHTML="🔥 "+streak;
+
+}
+
+nextWord();
 
 /* 彩虹输入 */
 
@@ -178,7 +213,7 @@ for(let i=0;i<text.length;i++){
 
 let color=colors[i%7];
 
-html+="<span style='color:"+color+";font-weight:700'>"+text[i]+"</span>";
+html+="<span style='color:"+color+"'>"+text[i]+"</span>";
 
 }
 
@@ -186,8 +221,7 @@ preview.innerHTML=html;
 
 });
 
-
-/* Enter确认 */
+/* Enter判断 */
 
 input.addEventListener("keydown",function(e){
 
@@ -195,44 +229,30 @@ if(e.key==="Enter"){
 
 let value=input.value.toLowerCase().replace(" ","");
 
-if(value===answer){
+if(value===current.type){
 
-hanzi.classList.add("big");
+score++;
+streak++;
 
-/* 彩虹扫过 */
+speakChinese(current.hanzi);
 
-let flash=document.createElement("div");
-
-flash.className="rainbowFlash";
-
-hanzi.appendChild(flash);
-
-setTimeout(()=>{
-flash.remove();
-},1000);
-
-
-document.getElementById("structure").innerHTML="Structure: Left + Right";
-
-document.getElementById("parts").innerHTML=
-"你 = 亻 + 尔<br>好 = 女 + 子";
-
-speakChinese("你好");
+setTimeout(nextWord,800);
 
 }else{
 
-input.style.border="3px solid red";
+streak=0;
+
+input.style.border="2px solid red";
 
 setTimeout(()=>{
-input.style.border="1px solid #ccc";
-},800);
+input.style.border="2px solid #e5e7eb";
+},600);
 
 }
 
 }
 
 });
-
 
 /* 中文发音 */
 
@@ -244,8 +264,6 @@ speech.lang="zh-CN";
 
 speech.rate=0.9;
 
-speech.pitch=1;
-
 speechSynthesis.speak(speech);
 
 }
@@ -253,4 +271,5 @@ speechSynthesis.speak(speech);
 </script>
 
 </body>
+
 </html>
