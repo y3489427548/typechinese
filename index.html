@@ -16,7 +16,7 @@ padding-top:120px;
 .card{
 background:white;
 padding:40px;
-width:320px;
+width:340px;
 margin:auto;
 border-radius:12px;
 }
@@ -24,6 +24,11 @@ border-radius:12px;
 .hanzi{
 font-size:40px;
 font-weight:bold;
+transition:0.3s;
+}
+
+.hanzi.big{
+font-size:70px;
 }
 
 .pinyin{
@@ -34,7 +39,7 @@ margin-top:10px;
 input{
 font-size:20px;
 padding:10px;
-width:200px;
+width:220px;
 margin-top:20px;
 }
 
@@ -44,8 +49,14 @@ font-size:18px;
 }
 
 .structure{
+margin-top:20px;
+font-size:18px;
+color:#444;
+}
+
+.parts{
 margin-top:10px;
-color:#666;
+font-size:28px;
 }
 
 </style>
@@ -55,38 +66,42 @@ color:#666;
 
 <div class="card">
 
-<div class="hanzi">你好</div>
+<div id="hanzi" class="hanzi">你好</div>
 
 <div class="pinyin">ni hao</div>
 
-<input id="input" placeholder="type pinyin">
+<input id="input" placeholder="type pinyin then press Enter">
 
 <div class="result" id="result"></div>
 
 <div class="structure" id="structure"></div>
+
+<div class="parts" id="parts"></div>
 
 </div>
 
 <script>
 
 let input = document.getElementById("input");
+let hanzi = document.getElementById("hanzi");
 
-/* 键盘声音 */
-let keySound = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
+input.addEventListener("keydown",function(e){
 
-input.addEventListener("keyup", function(){
+if(e.key === "Enter"){
 
-/* 每次打字播放声音 */
-keySound.currentTime = 0;
-keySound.play();
+let value = input.value.toLowerCase().replace(" ","");
 
-let value = input.value.toLowerCase();
+if(value === "nihao"){
 
-if(value == "nihao" || value == "ni hao"){
+hanzi.classList.add("big");
 
 document.getElementById("result").innerHTML="Hello";
 
 document.getElementById("structure").innerHTML="Structure: Left + Right";
+
+document.getElementById("parts").innerHTML="你 = 亻 + 尔<br>好 = 女 + 子";
+
+}
 
 }
 
