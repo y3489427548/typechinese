@@ -4,7 +4,6 @@
 <head>
 
 <meta charset="UTF-8">
-
 <title>HanType</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -74,6 +73,14 @@ font-size:18px;
 color:#555;
 }
 
+.wordPreview{
+display:flex;
+justify-content:space-between;
+color:#bbb;
+font-size:18px;
+margin-bottom:10px;
+}
+
 </style>
 
 </head>
@@ -83,22 +90,21 @@ color:#555;
 <div class="card">
 
 <div class="topbar">
-
 <div id="progress"></div>
-
 <div id="score"></div>
-
 <div id="streak"></div>
+</div>
 
+<div class="wordPreview">
+<div id="prev"></div>
+<div id="next"></div>
 </div>
 
 <div id="english" class="english"></div>
-
 <div id="hanzi" class="hanzi"></div>
-
 <div id="pinyin" class="pinyin"></div>
 
-<input id="input" placeholder="type pinyin then press Enter">
+<input id="input" placeholder="type pinyin or hanzi then press Enter">
 
 <div id="preview" class="preview"></div>
 
@@ -125,48 +131,41 @@ let words=[
 {hanzi:"你好",pinyin:"nǐ hǎo",type:"nihao",english:"Hello"},
 {hanzi:"谢谢",pinyin:"xiè xie",type:"xiexie",english:"Thank you"},
 {hanzi:"再见",pinyin:"zài jiàn",type:"zaijian",english:"Goodbye"},
+{hanzi:"请",pinyin:"qǐng",type:"qing",english:"Please"},
+{hanzi:"对不起",pinyin:"duì bù qǐ",type:"duibuqi",english:"Sorry"},
+{hanzi:"没关系",pinyin:"méi guān xi",type:"meiguanxi",english:"It's ok"},
+{hanzi:"欢迎",pinyin:"huān yíng",type:"huanying",english:"Welcome"},
+{hanzi:"早上好",pinyin:"zǎo shang hǎo",type:"zaoshanghao",english:"Good morning"},
+{hanzi:"晚上好",pinyin:"wǎn shang hǎo",type:"wanshanghao",english:"Good evening"},
+{hanzi:"晚安",pinyin:"wǎn ān",type:"wanan",english:"Good night"},
+
 {hanzi:"中国",pinyin:"zhōng guó",type:"zhongguo",english:"China"},
 {hanzi:"美国",pinyin:"měi guó",type:"meiguo",english:"USA"},
 {hanzi:"英国",pinyin:"yīng guó",type:"yingguo",english:"UK"},
 {hanzi:"日本",pinyin:"rì běn",type:"riben",english:"Japan"},
 {hanzi:"韩国",pinyin:"hán guó",type:"hanguo",english:"Korea"},
-{hanzi:"北京",pinyin:"běi jīng",type:"beijing",english:"Beijing"},
-{hanzi:"上海",pinyin:"shàng hǎi",type:"shanghai",english:"Shanghai"},
+{hanzi:"法国",pinyin:"fǎ guó",type:"faguo",english:"France"},
+{hanzi:"德国",pinyin:"dé guó",type:"deguo",english:"Germany"},
+{hanzi:"加拿大",pinyin:"jiā ná dà",type:"jianada",english:"Canada"},
+{hanzi:"澳大利亚",pinyin:"ào dà lì yà",type:"aodaliya",english:"Australia"},
+{hanzi:"新加坡",pinyin:"xīn jiā pō",type:"xinjiapo",english:"Singapore"},
 
-{hanzi:"朋友",pinyin:"péng you",type:"pengyou",english:"Friend"},
-{hanzi:"学生",pinyin:"xué shēng",type:"xuesheng",english:"Student"},
-{hanzi:"老师",pinyin:"lǎo shī",type:"laoshi",english:"Teacher"},
-{hanzi:"医生",pinyin:"yī shēng",type:"yisheng",english:"Doctor"},
-{hanzi:"男人",pinyin:"nán rén",type:"nanren",english:"Man"},
-{hanzi:"女人",pinyin:"nǚ rén",type:"nvren",english:"Woman"},
-{hanzi:"孩子",pinyin:"hái zi",type:"haizi",english:"Child"},
 {hanzi:"爸爸",pinyin:"bà ba",type:"baba",english:"Father"},
 {hanzi:"妈妈",pinyin:"mā ma",type:"mama",english:"Mother"},
+{hanzi:"哥哥",pinyin:"gē ge",type:"gege",english:"Brother"},
+{hanzi:"姐姐",pinyin:"jiě jie",type:"jiejie",english:"Sister"},
+{hanzi:"弟弟",pinyin:"dì di",type:"didi",english:"Younger brother"},
+{hanzi:"妹妹",pinyin:"mèi mei",type:"meimei",english:"Younger sister"},
+{hanzi:"儿子",pinyin:"ér zi",type:"erzi",english:"Son"},
+{hanzi:"女儿",pinyin:"nǚ ér",type:"nver",english:"Daughter"},
 {hanzi:"家人",pinyin:"jiā rén",type:"jiaren",english:"Family"},
-
-{hanzi:"学习",pinyin:"xué xí",type:"xuexi",english:"Study"},
-{hanzi:"工作",pinyin:"gōng zuò",type:"gongzuo",english:"Work"},
-{hanzi:"吃饭",pinyin:"chī fàn",type:"chifan",english:"Eat"},
-{hanzi:"喝水",pinyin:"hē shuǐ",type:"heshui",english:"Drink"},
-{hanzi:"睡觉",pinyin:"shuì jiào",type:"shuijiao",english:"Sleep"},
-{hanzi:"走路",pinyin:"zǒu lù",type:"zoulu",english:"Walk"},
-{hanzi:"开车",pinyin:"kāi chē",type:"kaiche",english:"Drive"},
-{hanzi:"买",pinyin:"mǎi",type:"mai",english:"Buy"},
-{hanzi:"卖",pinyin:"mài",type:"mai",english:"Sell"},
-{hanzi:"看",pinyin:"kàn",type:"kan",english:"Look"},
-
-{hanzi:"今天",pinyin:"jīn tiān",type:"jintian",english:"Today"},
-{hanzi:"明天",pinyin:"míng tiān",type:"mingtian",english:"Tomorrow"},
-{hanzi:"昨天",pinyin:"zuó tiān",type:"zuotian",english:"Yesterday"},
-{hanzi:"现在",pinyin:"xiàn zài",type:"xianzai",english:"Now"},
-{hanzi:"以前",pinyin:"yǐ qián",type:"yiqian",english:"Before"},
-{hanzi:"以后",pinyin:"yǐ hòu",type:"yihou",english:"After"},
-{hanzi:"早上",pinyin:"zǎo shang",type:"zaoshang",english:"Morning"},
-{hanzi:"晚上",pinyin:"wǎn shang",type:"wanshang",english:"Evening"},
-{hanzi:"时间",pinyin:"shí jiān",type:"shijian",english:"Time"},
-{hanzi:"小时",pinyin:"xiǎo shí",type:"xiaoshi",english:"Hour"}
+{hanzi:"孩子",pinyin:"hái zi",type:"haizi",english:"Child"}
 
 ];
+
+/* 错题本 */
+
+let wrongWords=[];
 
 /* 游戏变量 */
 
@@ -182,7 +181,9 @@ let preview=document.getElementById("preview");
 
 function nextWord(){
 
-current=words[Math.floor(Math.random()*words.length)];
+let randomIndex=Math.floor(Math.random()*words.length);
+
+current=words[randomIndex];
 
 document.getElementById("hanzi").innerHTML=current.hanzi;
 document.getElementById("pinyin").innerHTML=current.pinyin;
@@ -196,6 +197,15 @@ index++;
 document.getElementById("progress").innerHTML="Word "+index;
 document.getElementById("score").innerHTML="Score "+score;
 document.getElementById("streak").innerHTML="🔥 "+streak;
+
+let prevIndex=randomIndex-1;
+let nextIndex=randomIndex+1;
+
+if(prevIndex<0) prevIndex=words.length-1;
+if(nextIndex>=words.length) nextIndex=0;
+
+document.getElementById("prev").innerHTML="← "+words[prevIndex].hanzi;
+document.getElementById("next").innerHTML=words[nextIndex].hanzi+" →";
 
 }
 
@@ -227,20 +237,21 @@ input.addEventListener("keydown",function(e){
 
 if(e.key==="Enter"){
 
-let value=input.value.toLowerCase().replace(" ","");
+let value=input.value.toLowerCase().replace(/\s/g,'');
 
-if(value===current.type){
+if(value===current.type || value===current.hanzi){
 
 score++;
 streak++;
 
 speakChinese(current.hanzi);
 
-setTimeout(nextWord,800);
+setTimeout(nextWord,700);
 
 }else{
 
 streak=0;
+wrongWords.push(current);
 
 input.style.border="2px solid red";
 
@@ -261,7 +272,6 @@ function speakChinese(text){
 let speech=new SpeechSynthesisUtterance(text);
 
 speech.lang="zh-CN";
-
 speech.rate=0.9;
 
 speechSynthesis.speak(speech);
