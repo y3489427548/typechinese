@@ -23,26 +23,27 @@ box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
 .hanzi{
-font-size:44px;
-font-weight:bold;
+font-size:46px;
+font-weight:700;
 transition:0.3s;
 position:relative;
 }
 
 .hanzi.big{
-font-size:70px;
+font-size:72px;
 }
 
 .pinyin{
 color:#bbb;
-font-size:26px;
+font-size:28px;
 margin-top:10px;
 }
 
 .preview{
-font-size:28px;
+font-size:30px;
 margin-top:20px;
-letter-spacing:4px;
+letter-spacing:6px;
+font-weight:700;
 }
 
 input{
@@ -70,32 +71,43 @@ margin-top:10px;
 font-size:28px;
 }
 
-/* 彩虹动画 */
+/* 柔和彩虹扫过 */
 
 .rainbowFlash{
 position:absolute;
 top:0;
-left:0;
-right:0;
-bottom:0;
+left:-100%;
+width:200%;
+height:100%;
+
 background:linear-gradient(
-90deg,
-red,
-orange,
-yellow,
-green,
-cyan,
-blue,
-violet
+120deg,
+rgba(255,0,0,0.25),
+rgba(255,127,0,0.25),
+rgba(255,215,0,0.25),
+rgba(0,170,0,0.25),
+rgba(0,206,209,0.25),
+rgba(0,102,255,0.25),
+rgba(139,0,255,0.25)
 );
-opacity:0.6;
-animation:flash 0.8s ease;
+
+filter:blur(8px);
+
+animation:rainbowMove 1s ease;
 }
 
-@keyframes flash{
-0%{opacity:0;}
-50%{opacity:1;}
-100%{opacity:0;}
+@keyframes rainbowMove{
+0%{
+transform:translateX(-100%);
+opacity:0;
+}
+50%{
+opacity:1;
+}
+100%{
+transform:translateX(100%);
+opacity:0;
+}
 }
 
 </style>
@@ -108,7 +120,7 @@ animation:flash 0.8s ease;
 
 <div id="hanzi" class="hanzi">你好</div>
 
-<div id="pinyin" class="pinyin">nǐ hǎo</div>
+<div class="pinyin">nǐ hǎo</div>
 
 <input id="input" placeholder="type pinyin then press Enter">
 
@@ -130,27 +142,32 @@ let hanzi=document.getElementById("hanzi");
 
 let answer="nihao";
 
+/* 彩虹标准色 */
+
 let colors=[
-"red",
-"orange",
-"gold",
-"green",
-"cyan",
-"blue",
-"violet"
+"#FF0000",
+"#FF7F00",
+"#FFD700",
+"#00AA00",
+"#00CED1",
+"#0066FF",
+"#8B00FF"
 ];
 
-// 键盘声音
+/* 键盘声音 */
+
 let keySound=new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
 
-input.addEventListener("keydown",function(e){
+input.addEventListener("keydown",function(){
 
 keySound.currentTime=0;
 keySound.play().catch(()=>{});
 
 });
 
-// 彩虹输入效果
+
+/* 彩虹输入 */
+
 input.addEventListener("input",function(){
 
 let text=input.value;
@@ -161,7 +178,7 @@ for(let i=0;i<text.length;i++){
 
 let color=colors[i%7];
 
-html+="<span style='color:"+color+"'>"+text[i]+"</span>";
+html+="<span style='color:"+color+";font-weight:700'>"+text[i]+"</span>";
 
 }
 
@@ -169,7 +186,9 @@ preview.innerHTML=html;
 
 });
 
-// Enter确认
+
+/* Enter确认 */
+
 input.addEventListener("keydown",function(e){
 
 if(e.key==="Enter"){
@@ -180,24 +199,34 @@ if(value===answer){
 
 hanzi.classList.add("big");
 
-// 彩虹闪过
+/* 彩虹扫过 */
+
 let flash=document.createElement("div");
+
 flash.className="rainbowFlash";
+
 hanzi.appendChild(flash);
 
 setTimeout(()=>{
 flash.remove();
-},800);
+},1000);
 
 document.getElementById("result").innerHTML="Correct";
 
-document.getElementById("structure").innerHTML=
-"Structure: Left + Right";
+document.getElementById("structure").innerHTML="Structure: Left + Right";
 
 document.getElementById("parts").innerHTML=
 "你 = 亻 + 尔<br>好 = 女 + 子";
 
 speakChinese("你好");
+
+}else{
+
+input.style.border="3px solid red";
+
+setTimeout(()=>{
+input.style.border="1px solid #ccc";
+},800);
 
 }
 
@@ -205,7 +234,9 @@ speakChinese("你好");
 
 });
 
-// 中文发音
+
+/* 中文发音 */
+
 function speakChinese(text){
 
 let speech=new SpeechSynthesisUtterance(text);
@@ -213,6 +244,8 @@ let speech=new SpeechSynthesisUtterance(text);
 speech.lang="zh-CN";
 
 speech.rate=0.9;
+
+speech.pitch=1;
 
 speechSynthesis.speak(speech);
 
