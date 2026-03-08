@@ -3,33 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <title>Type Chinese</title>
+
 <style>
+
 body{
 font-family:Arial;
 text-align:center;
 background:#f5f5f5;
-padding-top:100px;
+padding-top:120px;
 }
+
 .card{
 background:white;
 padding:40px;
-width:300px;
+width:320px;
 margin:auto;
-border-radius:10px;
+border-radius:12px;
 }
+
+.hanzi{
+font-size:40px;
+font-weight:bold;
+}
+
+.pinyin{
+color:#bbb;
+margin-top:10px;
+}
+
 input{
 font-size:20px;
 padding:10px;
 width:200px;
-margin-top:10px;
-}
-.hint{
-color:#bbb;
-}
-#chinese{
-font-size:32px;
 margin-top:20px;
 }
+
+.result{
+margin-top:20px;
+font-size:18px;
+}
+
+.structure{
+margin-top:10px;
+color:#666;
+}
+
 </style>
 </head>
 
@@ -37,31 +55,42 @@ margin-top:20px;
 
 <div class="card">
 
-<h2 id="english">Hello</h2>
+<div class="hanzi">你好</div>
 
-<p class="hint">ni hao</p>
+<div class="pinyin">ni hao</div>
 
-<input id="input" placeholder="type pinyin"/>
+<input id="input" placeholder="type pinyin">
 
-<div id="chinese"></div>
+<div class="result" id="result"></div>
+
+<div class="structure" id="structure"></div>
 
 </div>
 
 <script>
 
-let answer="ni hao"
+let input = document.getElementById("input");
 
-let input=document.getElementById("input")
+/* 键盘声音 */
+let keySound = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
 
-input.addEventListener("input",function(){
+input.addEventListener("keyup", function(){
 
-if(input.value.trim()==answer){
+/* 每次打字播放声音 */
+keySound.currentTime = 0;
+keySound.play();
 
-document.getElementById("chinese").innerText="你好"
+let value = input.value.toLowerCase();
+
+if(value == "nihao" || value == "ni hao"){
+
+document.getElementById("result").innerHTML="Hello";
+
+document.getElementById("structure").innerHTML="Structure: Left + Right";
 
 }
 
-})
+});
 
 </script>
 
