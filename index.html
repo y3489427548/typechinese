@@ -18,45 +18,54 @@ background:white;
 padding:40px;
 width:340px;
 margin:auto;
-border-radius:12px;
+border-radius:14px;
+box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
 .hanzi{
-font-size:40px;
+font-size:42px;
 font-weight:bold;
 transition:0.3s;
 }
 
 .hanzi.big{
-font-size:70px;
+font-size:64px;
 }
 
 .pinyin{
 color:#bbb;
-margin-top:10px;
+font-size:22px;
+margin-top:12px;
+transition:0.3s;
+}
+
+.pinyin.correct{
+color:#b57edc;
 }
 
 input{
-font-size:20px;
-padding:10px;
+font-size:22px;
+padding:12px;
 width:220px;
 margin-top:20px;
+border-radius:6px;
+border:1px solid #ccc;
 }
 
 .result{
 margin-top:20px;
-font-size:18px;
+font-size:20px;
 }
 
 .structure{
-margin-top:20px;
+margin-top:10px;
+color:#666;
 font-size:18px;
-color:#444;
 }
 
 .parts{
 margin-top:10px;
-font-size:28px;
+font-size:26px;
 }
 
 </style>
@@ -68,7 +77,7 @@ font-size:28px;
 
 <div id="hanzi" class="hanzi">你好</div>
 
-<div class="pinyin">ni hao</div>
+<div id="pinyin" class="pinyin">ni hao</div>
 
 <input id="input" placeholder="type pinyin then press Enter">
 
@@ -84,8 +93,17 @@ font-size:28px;
 
 let input = document.getElementById("input");
 let hanzi = document.getElementById("hanzi");
+let pinyin = document.getElementById("pinyin");
+
+
+// 键盘声音
+let keySound = new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
 
 input.addEventListener("keydown",function(e){
+
+// 播放键盘声
+keySound.currentTime = 0;
+keySound.play();
 
 if(e.key === "Enter"){
 
@@ -95,17 +113,46 @@ if(value === "nihao"){
 
 hanzi.classList.add("big");
 
+pinyin.classList.add("correct");
+
 document.getElementById("result").innerHTML="Hello";
 
 document.getElementById("structure").innerHTML="Structure: Left + Right";
 
-document.getElementById("parts").innerHTML="你 = 亻 + 尔<br>好 = 女 + 子";
+document.getElementById("parts").innerHTML=
+"你 = 亻 + 尔<br>好 = 女 + 子";
+
+speakChinese("你好");
+
+}else{
+
+input.style.border="3px solid red";
+
+setTimeout(()=>{
+input.style.border="1px solid #ccc";
+},800);
 
 }
 
 }
 
 });
+
+
+// 中文发音
+function speakChinese(text){
+
+let speech = new SpeechSynthesisUtterance(text);
+
+speech.lang = "zh-CN";
+
+speech.rate = 0.9;
+
+speech.pitch = 1;
+
+speechSynthesis.speak(speech);
+
+}
 
 </script>
 
