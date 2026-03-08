@@ -26,26 +26,6 @@ border-radius:20px;
 box-shadow:0 10px 25px rgba(0,0,0,0.08);
 }
 
-.controls{
-margin-bottom:15px;
-}
-
-.controls button{
-margin:6px;
-padding:8px 16px;
-border-radius:12px;
-border:none;
-background:white;
-cursor:pointer;
-font-size:22px;
-box-shadow:0 3px 8px rgba(0,0,0,0.1);
-transition:0.2s;
-}
-
-.controls button:hover{
-transform:scale(1.1);
-}
-
 .english{
 font-size:32px;
 font-weight:600;
@@ -109,15 +89,6 @@ margin-bottom:10px;
 
 <div class="card">
 
-<div class="controls">
-
-<button onclick="toggleSound()">📣</button>
-<button onclick="toggleRainbow()">🌈</button>
-<button onclick="toggleFavorite()">⭐</button>
-<button onclick="toggleMistake()">📚</button>
-
-</div>
-
 <div class="topbar">
 <div id="progress"></div>
 <div id="score"></div>
@@ -141,14 +112,6 @@ margin-bottom:10px;
 
 <script>
 
-/* 开关变量 */
-
-let soundOn=true;
-let rainbowOn=true;
-
-let favoriteWords=[];
-let wrongWords=[];
-
 /* 彩虹颜色 */
 
 let colors=[
@@ -161,7 +124,7 @@ let colors=[
 "#8B00FF"
 ];
 
-/* 词库 */
+/* 100词库 */
 
 let words=[
 
@@ -181,14 +144,28 @@ let words=[
 {hanzi:"英国",pinyin:"yīng guó",type:"yingguo",english:"UK"},
 {hanzi:"日本",pinyin:"rì běn",type:"riben",english:"Japan"},
 {hanzi:"韩国",pinyin:"hán guó",type:"hanguo",english:"Korea"},
+{hanzi:"法国",pinyin:"fǎ guó",type:"faguo",english:"France"},
+{hanzi:"德国",pinyin:"dé guó",type:"deguo",english:"Germany"},
+{hanzi:"加拿大",pinyin:"jiā ná dà",type:"jianada",english:"Canada"},
+{hanzi:"澳大利亚",pinyin:"ào dà lì yà",type:"aodaliya",english:"Australia"},
+{hanzi:"新加坡",pinyin:"xīn jiā pō",type:"xinjiapo",english:"Singapore"},
 
 {hanzi:"爸爸",pinyin:"bà ba",type:"baba",english:"Father"},
 {hanzi:"妈妈",pinyin:"mā ma",type:"mama",english:"Mother"},
 {hanzi:"哥哥",pinyin:"gē ge",type:"gege",english:"Brother"},
 {hanzi:"姐姐",pinyin:"jiě jie",type:"jiejie",english:"Sister"},
+{hanzi:"弟弟",pinyin:"dì di",type:"didi",english:"Younger brother"},
+{hanzi:"妹妹",pinyin:"mèi mei",type:"meimei",english:"Younger sister"},
+{hanzi:"儿子",pinyin:"ér zi",type:"erzi",english:"Son"},
+{hanzi:"女儿",pinyin:"nǚ ér",type:"nver",english:"Daughter"},
+{hanzi:"家人",pinyin:"jiā rén",type:"jiaren",english:"Family"},
 {hanzi:"孩子",pinyin:"hái zi",type:"haizi",english:"Child"}
 
 ];
+
+/* 错题本 */
+
+let wrongWords=[];
 
 /* 游戏变量 */
 
@@ -221,6 +198,15 @@ document.getElementById("progress").innerHTML="Word "+index;
 document.getElementById("score").innerHTML="Score "+score;
 document.getElementById("streak").innerHTML="🔥 "+streak;
 
+let prevIndex=randomIndex-1;
+let nextIndex=randomIndex+1;
+
+if(prevIndex<0) prevIndex=words.length-1;
+if(nextIndex>=words.length) nextIndex=0;
+
+document.getElementById("prev").innerHTML="← "+words[prevIndex].hanzi;
+document.getElementById("next").innerHTML=words[nextIndex].hanzi+" →";
+
 }
 
 nextWord();
@@ -235,7 +221,7 @@ let html="";
 
 for(let i=0;i<text.length;i++){
 
-let color=rainbowOn?colors[i%7]:"#333";
+let color=colors[i%7];
 
 html+="<span style='color:"+color+"'>"+text[i]+"</span>";
 
@@ -258,9 +244,7 @@ if(value===current.type || value===current.hanzi){
 score++;
 streak++;
 
-if(soundOn){
 speakChinese(current.hanzi);
-}
 
 setTimeout(nextWord,700);
 
@@ -294,33 +278,8 @@ speechSynthesis.speak(speech);
 
 }
 
-/* 按钮功能 */
-
-function toggleSound(){
-soundOn=!soundOn;
-}
-
-function toggleRainbow(){
-rainbowOn=!rainbowOn;
-}
-
-function toggleFavorite(){
-favoriteWords.push(current);
-alert("⭐ saved");
-}
-
-function toggleMistake(){
-
-if(wrongWords.length>0){
-words=wrongWords;
-index=0;
-nextWord();
-}
-
-}
-
 </script>
 
 </body>
 
-</html>
+</html
