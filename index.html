@@ -96,8 +96,8 @@ margin-bottom:10px;
 </div>
 
 <div class="wordPreview">
-<div id="prev"></div>
-<div id="next"></div>
+<div id="prev" onclick="prevWord()" style="cursor:pointer"></div>
+<div id="next" onclick="nextWordManual()" style="cursor:pointer"></div>
 </div>
 
 <div id="english" class="english"></div>
@@ -173,7 +173,7 @@ let current;
 let score=0;
 let streak=0;
 let index=0;
-
+let currentIndex=0;
 let input=document.getElementById("input");
 let preview=document.getElementById("preview");
 
@@ -181,9 +181,8 @@ let preview=document.getElementById("preview");
 
 function nextWord(){
 
-let randomIndex=Math.floor(Math.random()*words.length);
-
-current=words[randomIndex];
+currentIndex=Math.floor(Math.random()*words.length);
+current=words[currentIndex];
 
 document.getElementById("hanzi").innerHTML=current.hanzi;
 document.getElementById("pinyin").innerHTML=current.pinyin;
@@ -198,8 +197,8 @@ document.getElementById("progress").innerHTML="Word "+index;
 document.getElementById("score").innerHTML="Score "+score;
 document.getElementById("streak").innerHTML="🔥 "+streak;
 
-let prevIndex=randomIndex-1;
-let nextIndex=randomIndex+1;
+let prevIndex=currentIndex-1;
+let nextIndex=currentIndex+1;
 
 if(prevIndex<0) prevIndex=words.length-1;
 if(nextIndex>=words.length) nextIndex=0;
@@ -275,6 +274,37 @@ speech.lang="zh-CN";
 speech.rate=0.9;
 
 speechSynthesis.speak(speech);
+
+}
+function prevWord(){
+
+currentIndex--;
+
+if(currentIndex<0){
+currentIndex=words.length-1;
+}
+
+current=words[currentIndex];
+
+document.getElementById("hanzi").innerHTML=current.hanzi;
+document.getElementById("pinyin").innerHTML=current.pinyin;
+document.getElementById("english").innerHTML=current.english;
+
+}
+
+function nextWordManual(){
+
+currentIndex++;
+
+if(currentIndex>=words.length){
+currentIndex=0;
+}
+
+current=words[currentIndex];
+
+document.getElementById("hanzi").innerHTML=current.hanzi;
+document.getElementById("pinyin").innerHTML=current.pinyin;
+document.getElementById("english").innerHTML=current.english;
 
 }
 
