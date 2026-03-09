@@ -204,7 +204,37 @@ structure:"Structure: Left + Right<br>谢 = 讠 + 射"},
 /* 自动结构识别 */
 
 function autoStructure(hanzi){
+function detectStructure(text){
 
+let leftRight = ["你","好","谢","请","妈","姐","妹","法","德","韩","加","孩"]
+let topBottom = ["爸","安","拿","英","美","哥","弟","家"]
+let surround = ["国"]
+let single = ["大","儿","女","日","中"]
+
+let result=""
+
+for(let i=0;i<text.length;i++){
+
+let c=text[i]
+
+if(leftRight.includes(c)){
+result+=c+" → Left + Right<br>"
+}
+else if(topBottom.includes(c)){
+result+=c+" → Top + Bottom<br>"
+}
+else if(surround.includes(c)){
+result+=c+" → Surround<br>"
+}
+else if(single.includes(c)){
+result+=c+" → Single Structure<br>"
+}
+
+}
+
+return result
+
+}
 let map={
 
 "你":"Left + Right<br>亻 + 尔",
@@ -263,7 +293,7 @@ document.getElementById("hanzi").innerHTML=current.hanzi;
 document.getElementById("pinyin").innerHTML=current.pinyin;
 document.getElementById("english").innerHTML=current.english;
 
-document.getElementById("structure").innerHTML=current.structure || autoStructure(current.hanzi);
+document.getElementById("structure").innerHTML=current.structure || detectStructure(current.hanzi);
 
 input.value="";
 preview.innerHTML="";
