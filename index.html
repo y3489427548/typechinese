@@ -51,8 +51,6 @@ letter-spacing:6px;
 font-weight:700;
 }
 
-/* 新增结构样式 */
-
 .structure{
 margin-top:20px;
 font-size:20px;
@@ -117,7 +115,6 @@ margin-bottom:10px;
 
 <div id="preview" class="preview"></div>
 
-<!-- 新增结构区域 -->
 <div id="structure" class="structure"></div>
 
 </div>
@@ -146,11 +143,9 @@ structure:"Structure: Left + Right<br>你 = 亻 + 尔<br>好 = 女 + 子"},
 {hanzi:"谢谢",pinyin:"xiè xie",type:"xiexie",english:"Thank you",
 structure:"Structure: Left + Right<br>谢 = 讠 + 射"},
 
-{hanzi:"再见",pinyin:"zài jiàn",type:"zaijian",english:"Goodbye",
-structure:"Structure: Top + Bottom<br>再 = 一 + 冉<br>见 = 冂 + 儿"},
+{hanzi:"再见",pinyin:"zài jiàn",type:"zaijian",english:"Goodbye"},
 
-{hanzi:"请",pinyin:"qǐng",type:"qing",english:"Please",
-structure:"Structure: Left + Right<br>请 = 讠 + 青"},
+{hanzi:"请",pinyin:"qǐng",type:"qing",english:"Please"},
 
 {hanzi:"对不起",pinyin:"duì bù qǐ",type:"duibuqi",english:"Sorry"},
 
@@ -162,39 +157,86 @@ structure:"Structure: Left + Right<br>请 = 讠 + 青"},
 
 {hanzi:"晚上好",pinyin:"wǎn shang hǎo",type:"wanshanghao",english:"Good evening"},
 
-{hanzi:"晚安",pinyin:"wǎn ān",type:"wanan",english:"Good night",
-structure:"Structure: Top + Bottom<br>安 = 宀 + 女"},
+{hanzi:"晚安",pinyin:"wǎn ān",type:"wanan",english:"Good night"},
 
-{hanzi:"中国",pinyin:"zhōng guó",type:"zhongguo",english:"China",
-structure:"Structure: Surround<br>国 = 囗 + 玉"},
+{hanzi:"中国",pinyin:"zhōng guó",type:"zhongguo",english:"China"},
 
 {hanzi:"美国",pinyin:"měi guó",type:"meiguo",english:"USA"},
+
 {hanzi:"英国",pinyin:"yīng guó",type:"yingguo",english:"UK"},
+
 {hanzi:"日本",pinyin:"rì běn",type:"riben",english:"Japan"},
+
 {hanzi:"韩国",pinyin:"hán guó",type:"hanguo",english:"Korea"},
+
 {hanzi:"法国",pinyin:"fǎ guó",type:"faguo",english:"France"},
+
 {hanzi:"德国",pinyin:"dé guó",type:"deguo",english:"Germany"},
+
 {hanzi:"加拿大",pinyin:"jiā ná dà",type:"jianada",english:"Canada"},
+
 {hanzi:"澳大利亚",pinyin:"ào dà lì yà",type:"aodaliya",english:"Australia"},
+
 {hanzi:"新加坡",pinyin:"xīn jiā pō",type:"xinjiapo",english:"Singapore"},
 
-{hanzi:"爸爸",pinyin:"bà ba",type:"baba",english:"Father",
-structure:"Structure: Top + Bottom<br>爸 = 父 + 巴"},
+{hanzi:"爸爸",pinyin:"bà ba",type:"baba",english:"Father"},
 
-{hanzi:"妈妈",pinyin:"mā ma",type:"mama",english:"Mother",
-structure:"Structure: Left + Right<br>妈 = 女 + 马"},
+{hanzi:"妈妈",pinyin:"mā ma",type:"mama",english:"Mother"},
 
 {hanzi:"哥哥",pinyin:"gē ge",type:"gege",english:"Brother"},
+
 {hanzi:"姐姐",pinyin:"jiě jie",type:"jiejie",english:"Sister"},
+
 {hanzi:"弟弟",pinyin:"dì di",type:"didi",english:"Younger brother"},
+
 {hanzi:"妹妹",pinyin:"mèi mei",type:"meimei",english:"Younger sister"},
+
 {hanzi:"儿子",pinyin:"ér zi",type:"erzi",english:"Son"},
+
 {hanzi:"女儿",pinyin:"nǚ ér",type:"nver",english:"Daughter"},
+
 {hanzi:"家人",pinyin:"jiā rén",type:"jiaren",english:"Family"},
-{hanzi:"孩子",pinyin:"hái zi",type:"haizi",english:"Child",
-structure:"Structure: Left + Right<br>孩 = 子 + 亥"}
+
+{hanzi:"孩子",pinyin:"hái zi",type:"haizi",english:"Child"}
 
 ];
+
+/* 自动结构识别 */
+
+function autoStructure(hanzi){
+
+let map={
+
+"你":"Left + Right<br>亻 + 尔",
+"好":"Left + Right<br>女 + 子",
+"谢":"Left + Right<br>讠 + 射",
+"请":"Left + Right<br>讠 + 青",
+"妈":"Left + Right<br>女 + 马",
+"爸":"Top + Bottom<br>父 + 巴",
+"安":"Top + Bottom<br>宀 + 女",
+"国":"Surround<br>囗 + 玉",
+"中":"Vertical<br>丨 + 口",
+"加":"Left + Right<br>力 + 口",
+"拿":"Top + Bottom<br>合 + 手",
+"孩":"Left + Right<br>子 + 亥"
+
+};
+
+let result="";
+
+for(let i=0;i<hanzi.length;i++){
+
+let char=hanzi[i];
+
+if(map[char]){
+result+=char+" → "+map[char]+"<br>";
+}
+
+}
+
+return result;
+
+}
 
 /* 错题本 */
 
@@ -221,7 +263,7 @@ document.getElementById("hanzi").innerHTML=current.hanzi;
 document.getElementById("pinyin").innerHTML=current.pinyin;
 document.getElementById("english").innerHTML=current.english;
 
-document.getElementById("structure").innerHTML=current.structure || "";
+document.getElementById("structure").innerHTML=current.structure || autoStructure(current.hanzi);
 
 input.value="";
 preview.innerHTML="";
@@ -325,7 +367,7 @@ current=words[currentIndex];
 document.getElementById("hanzi").innerHTML=current.hanzi;
 document.getElementById("pinyin").innerHTML=current.pinyin;
 document.getElementById("english").innerHTML=current.english;
-document.getElementById("structure").innerHTML=current.structure || "";
+document.getElementById("structure").innerHTML=current.structure || autoStructure(current.hanzi);
 
 }
 
@@ -344,7 +386,7 @@ current=words[currentIndex];
 document.getElementById("hanzi").innerHTML=current.hanzi;
 document.getElementById("pinyin").innerHTML=current.pinyin;
 document.getElementById("english").innerHTML=current.english;
-document.getElementById("structure").innerHTML=current.structure || "";
+document.getElementById("structure").innerHTML=current.structure || autoStructure(current.hanzi);
 
 }
 
