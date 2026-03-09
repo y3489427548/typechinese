@@ -88,7 +88,8 @@ margin-bottom:10px;
 <body>
 
 <div class="card">
-
+<button onclick="toggleMenu()">📋</button>
+<div id="menu" style="display:none;margin-bottom:15px;"></div>
 <div class="topbar">
 <div id="progress"></div>
 <div id="score"></div>
@@ -277,7 +278,43 @@ speech.rate=0.9;
 speechSynthesis.speak(speech);
 
 }
+function toggleMenu(){
 
+let menu=document.getElementById("menu");
+
+if(menu.style.display==="none"){
+
+let html="";
+
+for(let i=0;i<words.length;i++){
+
+html+="<div onclick='jumpWord("+i+")' style='cursor:pointer;padding:4px'>"+words[i].hanzi+" - "+words[i].english+"</div>";
+
+
+
+menu.innerHTML=html;
+
+menu.style.display="block";
+
+}else{
+
+menu.style.display="none";
+
+}
+
+}
+
+function jumpWord(i){
+
+current=words[i];
+
+document.getElementById("hanzi").innerHTML=current.hanzi;
+document.getElementById("pinyin").innerHTML=current.pinyin;
+document.getElementById("english").innerHTML=current.english;
+
+document.getElementById("menu").style.display="none";
+
+}
 </script>
 
 </body>
