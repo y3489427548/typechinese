@@ -205,7 +205,7 @@ if(nextIndex>=words.length) nextIndex=0;
 
 document.getElementById("prev").innerHTML="← "+words[prevIndex].hanzi;
 document.getElementById("next").innerHTML=words[nextIndex].hanzi+" →";
-
+document.getElementById("progress").innerHTML="Word "+(currentIndex+1);
 }
 
 nextWord();
@@ -289,7 +289,15 @@ current=words[currentIndex];
 document.getElementById("hanzi").innerHTML=current.hanzi;
 document.getElementById("pinyin").innerHTML=current.pinyin;
 document.getElementById("english").innerHTML=current.english;
+let prevIndex=currentIndex-1;
+let nextIndex=currentIndex+1;
 
+if(prevIndex<0) prevIndex=words.length-1;
+if(nextIndex>=words.length) nextIndex=0;
+
+document.getElementById("prev").innerHTML="← "+words[prevIndex].hanzi;
+document.getElementById("next").innerHTML=words[nextIndex].hanzi+" →";
+document.getElementById("progress").innerHTML="Word "+(currentIndex+1);
 }
 
 function nextWordManual(){
@@ -305,7 +313,14 @@ current=words[currentIndex];
 document.getElementById("hanzi").innerHTML=current.hanzi;
 document.getElementById("pinyin").innerHTML=current.pinyin;
 document.getElementById("english").innerHTML=current.english;
+let prevIndex=currentIndex-1;
+let nextIndex=currentIndex+1;
 
+if(prevIndex<0) prevIndex=words.length-1;
+if(nextIndex>=words.length) nextIndex=0;
+
+document.getElementById("prev").innerHTML="← "+words[prevIndex].hanzi;
+document.getElementById("next").innerHTML=words[nextIndex].hanzi+" →";
 }
 
 </script>
